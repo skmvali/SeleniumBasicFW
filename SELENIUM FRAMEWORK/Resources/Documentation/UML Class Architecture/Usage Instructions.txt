@@ -1,0 +1,11 @@
+1. Double click on the Code_2_UML.jar file 
+2. Click on 'Add' button under 'Code 2 UML' application file
+3. Browse the .class files/ a Jar file of your code (Ex: bin/build/<class files>)
+4. Click on next button 
+5. Click on next button 
+6. Select 'full-always all information' radio button under 'Elements draw mode:' section (if not selected by default)
+7. click on 'next' button 
+8. Obeserve that Uml class diagrams are shown under canvas. 
+9. Click on 'Save Image' button and choose image name and location to save 
+
+You are done 

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ivy-module version="2.0">
+    <info organisation="org.apache" module="SeleniumFramework"/>
+    <dependencies>
+    	<dependency org="ant-contrib" name="ant-contrib" rev="20020829"/>
+    	<dependency org="com.google.inject" name="guice" rev="3.0"/>
+        <dependency org="javax.activation" name="activation" rev="1.1.1"/>
+        <dependency org="dom4j" name="dom4j" rev="1.6.1"/>
+        <dependency org="junit" name="junit" rev="4.11"/>
+       	<dependency org="net.sourceforge.jexcelapi" name="jxl" rev="2.6.12"/> 
+        <dependency org="log4j" name="log4j" rev="1.2.17"/>
+        <dependency org="javax.mail" name="mail" rev="1.4.7"/>     
+        <dependency org="org.apache.poi" name="poi" rev="3.9"/>
+        <dependency org="org.apache.poi" name="poi-ooxml" rev="3.9"/>
+        <dependency org="org.apache.poi" name="poi-ooxml-schemas" rev="3.9"/>
+       	<dependency org="net.sourceforge.saxon" name="saxon" rev="9.1.0.8"/>         
+        <dependency org="org.seleniumhq.selenium" name="selenium-java" rev="2.32.0"/>
+      <!--  <dependency org="org.seleniumhq.selenium.client-drivers" name="selenium-java-client-driver" rev="1.0.2"/> -->        
+        <dependency org="org.seleniumhq.selenium" name="selenium-server" rev="2.32.0"/>        
+        <dependency org="org.testng" name="testng" rev="6.8"/>
+        <dependency org="org.apache.xmlbeans" name="xmlbeans" rev="2.5.0"/>
+    </dependencies>
+</ivy-module>

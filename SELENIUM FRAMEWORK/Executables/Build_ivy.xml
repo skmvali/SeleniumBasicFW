@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="SeleniumTestFramework" default="runTests_Linear" basedir=".">
+    
+<property name="build.dir" value="${basedir}\build"/>
+<property name="lib.dir" value="${basedir}\lib"/>    
+<property name="src.dir" value="${basedir}\test-src"/>	
+<property name="config.dir" value="${basedir}\TestNGSuites"/> 
+<property name="testngfail.dir" value="${basedir}\TestNG-Output"/>
+	
+<property name="ivy.install.version" value="2.3.0"/>
+<property name="ivy.jar.dir" value="${basedir}/ivy"/>
+<property name="ivy.jar.file" value="${ivy.jar.dir}/ivy.jar"/>
+	
+<property name="browser" value="C:\Program Files\Internet Explorer\iexplore.exe"/>
+<!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->    
+<target name="download-ivy" unless="skip.download">
+<mkdir dir="${ivy.jar.dir}"/>
+<echo message="installing ivy..."/>
+<get src="http://repo1.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar" dest="${ivy.jar.file}" usetimestamp="true"/>
+</target>
+	
+<target name="install-ivy" depends="download-ivy" description="--> install ivy">
+<path id="ivy.lib.path">
+<pathelement location="${ivy.jar.file}"/>
+</path>
+<taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path"/>
+</target>
+	
+<target name="update" depends="install-ivy" description="Download project dependencies">
+<!-- edited for brevity -->
+<ivy:settings/>
+<ivy:resolve/>		
+<ivy:retrieve pattern="${lib.dir}/[artifact]-[type]-[revision].[ext]"/>
+<!-- edited for brevity -->
+</target>
+	
+<!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-->	
+	
+<target name="setClassPath">       
+    <echo message="setting class paths....."/>    
+	<path id="classpath_jars">            
+		<pathelement path="${basedir}/" />            
+		<fileset dir="${lib.dir}" includes="*.jar" />        
+	</path>       
+	<pathconvert pathsep=":" property="test.classpath" refid="classpath_jars" />
+	<echo message="setting classpaths done...."/>       
+</target>
+   
+
+
+<target name="loadTestNG" depends="setClassPath">
+    <echo message="TestNG loading........"/>           
+	<taskdef resource="testngtasks" classpath="${test.classpath}"/>   
+</target>
+   
+
+<target name="init">       
+    <echo message="Creating build directories.........."/>   
+	<mkdir dir="${build.dir}"/>       
+	<tstamp>           
+		<format property="timestamp" pattern="dd-MM-yyyy_(HH-mm-ss)"/>      
+	</tstamp>       
+	<property name="build.log.dir" location="${basedir}/buildlogs"/>       
+	<mkdir dir="${build.log.dir}"/>      
+	<property name="build.log.filename" value="build_${timestamp}.log"/>     
+	<record name="${build.log.dir}/${build.log.filename}" loglevel="verbose" append="false"/>        
+	<echo message="build logged to ${build.log.filename}"/>    
+</target>
+    
+
+<target name="clean">        
+	<echo message="deleting existing build directory"/>        
+	<delete dir="${build.dir}"/>   	
+	<delete dir="${build.log.dir}"/>   
+</target>
+ 
+  
+<target name="compile" depends="clean,init,setClassPath,loadTestNG">
+	<echo message="classpath:${test.classpath}"/>       
+	<echo message="compiling.........."/>		
+	<echo message="${build.dir}"/>		
+	<echo message="${src.dir}"/>        
+	<javac destdir="${build.dir}" srcdir="${src.dir}" classpath="${test.classpath}"/>   
+</target>
+
+	
+	
+<target name="Copylog">	    
+    <echo message="Copying log4j files............"/>   
+	<copy todir="${build.dir}">			
+	<fileset dir="${src.dir}">				
+		<include name="log4j.properties"/>			
+	</fileset>		
+	</copy>			
+</target>
+
+
+<target name="CopyConfig">	    
+    <echo message="Copying Config.properties file......"/>   	
+	<copy todir="${build.dir}\Com\ConfigParameters">	
+	<fileset dir="${src.dir}\Com\ConfigParameters">										
+		<include name="Config.properties"/>
+	</fileset>		
+	</copy>		
+</target>
+	
+	<target name="CopyExternalLibFiles" depends="Ant-Contribtaskdef">
+		<if>
+			<available file="${basedir}\lib\MonteScreenRecorder.jar"/>
+			<then>
+				<echo message="MonteScreenRecorder.jar file already exists in lib folder......"/>				
+			</then>	
+			<else>
+				<echo message="MonteScreenRecorder.jar file doesn't exists in lib folder, so copying it from External lib folder......"/>
+				<copy todir="${basedir}\lib">	
+				<fileset dir="${basedir}\External lib">										
+					<include name="MonteScreenRecorder.jar"/>
+				</fileset>		
+				</copy>
+				<echo message="copying done"/>
+			</else>
+		</if>
+		<if>
+			<available file="${basedir}\lib\reportng-1.1.3.jar"/>
+			<then>
+				<echo message="reportng-1.1.3.jar file already exists in lib folder......"/>				
+			</then>	
+			<else>
+				<echo message="reportng-1.1.3.jar file doesn't exists in lib folder, so copying it from External lib folder......"/>
+				<copy todir="${basedir}\lib">	
+				<fileset dir="${basedir}\External lib">										
+					<include name="reportng-1.1.3.jar"/>
+				</fileset>		
+				</copy>
+				<echo message="copying done"/>
+			</else>
+		</if>
+		<if>
+			<available file="${basedir}\lib\velocity-dep-1.4.jar"/>
+			<then>
+				<echo message="velocity-dep-1.4.jar file already exists in lib folder......"/>				
+			</then>	
+			<else>
+				<echo message="velocity-dep-1.4.jar file doesn't exists in lib folder, so copying it from External lib folder......"/>
+				<copy todir="${basedir}\lib">	
+				<fileset dir="${basedir}\External lib">										
+					<include name="velocity-dep-1.4.jar"/>
+				</fileset>		
+				</copy>
+				<echo message="copying done"/>
+			</else>
+		</if>
+	</target>
+	
+	
+<!-- other way of copy functionality
+<target name="CopyConfig">				  
+	<copy todir="${build.dir}">	    
+		<fileset dir="${config.dir}" includes="ConfigParams.xml"/>		 
+	</copy>				    
+</target>
+		    
+-->
+	
+    
+<target name="runTests_Linear" depends="update,CopyExternalLibFiles,compile,Copylog,CopyConfig">   
+	<trycatch reference="exception_ref">
+		<try>
+			<echo message="Running TestNG suite file............."/> 
+			<testng classpath="${test.classpath}:${build.dir}" outputdir="TestNG-Results"
+			            haltonfailure="true"
+			            useDefaultListeners="false"
+			            listeners="org.uncommons.reportng.HTMLReporter,org.uncommons.reportng.JUnitXMLReporter">
+			      <xmlfileset dir="${config.dir}" includes="TestNG_Linear.xml"/> 
+			      <sysproperty key="org.uncommons.reportng.title" value="Selenium Framework Test Report"/>
+			 </testng>
+			<antcall target="LaunchReportNGReports"></antcall>
+		</try>
+		<catch>
+			<property name="exception" refid="exception_ref" />
+			<property name="message" value="Error in trycatch block:${line.separator}${exception}" />
+			<echo message="${message}" />
+			<antcall target="LaunchReportNGReports"></antcall>
+		</catch>
+	</trycatch>	
+</target>
+
+<target name="runTests_Grid" depends="update,CopyExternalLibFiles,compile,Copylog,CopyConfig">   
+	<trycatch reference="exception_ref">
+		<try>
+			<echo message="Running TestNG suite file............."/> 
+			<testng classpath="${test.classpath}:${build.dir}" outputdir="TestNG-Results"
+			            haltonfailure="true"
+			            useDefaultListeners="false"
+			            listeners="org.uncommons.reportng.HTMLReporter,org.uncommons.reportng.JUnitXMLReporter">
+			      <xmlfileset dir="${config.dir}" includes="TestNG_Grid.xml"/> 
+			      <sysproperty key="org.uncommons.reportng.title" value="Selenium Framework Test Report"/>
+			 </testng>
+			<antcall target="LaunchReportNGReports"></antcall>
+		</try>
+		<catch>
+			<property name="exception" refid="exception_ref" />
+			<property name="message" value="Error in trycatch block:${line.separator}${exception}" />
+			<echo message="${message}" />
+			<antcall target="LaunchReportNGReports"></antcall>
+		</catch>
+	</trycatch>	
+</target>
+
+	<target name="LaunchReportNGReports">
+		<echo message="ReportNG reports are generated..."/>
+		<echo message="Launching ReportNG reports with default browser..............."/>
+		<exec executable="${browser}" spawn="yes">	       
+			<arg line="${basedir}/TestNG-Results/html/index.html"/>	    	
+		</exec>
+	</target>
+	
+	<target name="TestNGReport" depends="loadTestNG">
+	        	
+		<delete dir="${basedir}/TestNGReports">      
+		</delete>    	
+		<mkdir dir="${basedir}/TestNGReports">   	
+		</mkdir>    	
+		<xslt in="${basedir}/TestNG-Output/testng-results.xml" style="${basedir}/Resources/testng-results.xsl" out="${basedir}/TestNGReports/index.html">   	
+			<param expression="${basedir}/TestNGReports" name="testNgXslt.outputDir" />		        
+			<param expression="true" name="testNgXslt.sortTestCaseLinks" />		        
+			<param expression="FAIL,SKIP,PASS,CONF,BY_CLASS" name="testNgXslt.testDetailsFilter" />		        
+			<param expression="true" name="testNgXslt.showRuntimeTotals" />		
+			<param expression="ZenQA Selenium TestNG Report" name="testNgXslt.reportTitle" />
+				       	
+			<classpath refid="classpath_jars"/>	       
+		</xslt>    
+		<echo message="TestNG reports are generated..."/>  
+		<echo message="Launching TestNG reports with default browser..............."/>    
+		<exec executable="${browser}" spawn="yes">	       
+			<arg line="${basedir}/TestNGReports/index.html"/>	    	
+		</exec>
+		
+	 </target>
+	
+	<target name="Ant-Contribtaskdef">
+		<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+		  <classpath>
+		    <pathelement location="${basedir}/lib/ant-contrib-jar-20020829.jar"/>
+		  </classpath>
+		</taskdef>
+	</target>   
+
+<!--
+<target name="RunAndViewReport" depends="report" >	    
+	<exec executable="${browser}" spawn="yes">	       
+		<arg line="${basedir}/Reports/index.html"/>	    	
+	</exec>       
+</target>
+	
+	
+
+<target name="junit-report">	
+	<delete dir="${basedir}/Reports/Junit"></delete>		        
+	<mkdir dir="${basedir}/Reports/Junit"></mkdir>		        
+	<junitreport todir="${basedir}/Reports/Junit">
+		<fileset dir="${basedir}/test-output">		                
+			<include name="*/*.xml">		           
+			</include>
+		</fileset>		            
+		<report format="noframes" todir="${basedir}/Reports/Junit">	        
+		</report>		
+	</junitreport>	
+</target>
+	
+	
+
+
+<target description="Generates and send testng test reports" name="sendreport">	  
+	<zip destfile="${basedir}/Reports/Reports.zip" basedir="${basedir}/Reports"/>	  
+	<mail mailhost="smtp.gmail.com" mailport="465" password="zenqatest" ssl="true" subject="Test build" user="cqauser@gmail.com">	     
+		<from address="cqauser@gmail.com"></from>	     
+		<replyto address="cqauser@gmail.com"></replyto>	     
+		<to address="zenqatest@gmail.com"></to>	     
+		<message>The Test nightly build has completed</message>	     
+		<attachments>	       
+			<fileset dir="${basedir}/Reports">	          
+				<include name="**/*.zip"></include>	      
+			</fileset>	     
+		</attachments>	  
+	</mail>	
+</target>
+	
+    
+
+<target name="sendMail">
+ 	
+	<zip destfile="${basedir}/Reports/Reports.zip" basedir="${basedir}/Reports"/>	        
+	<mail mailhost="smtp.gmail.com" mailport="465" subject="Notification of gmail build" ssl="false" user="cqauser@gmail.com" password="zenqatest">	            
+		<from address="cqauser@gmail.com"/>	            
+		<to address="ramya@zenqa.com"/>	            
+		<message>The build has finished. A details report of this build is attached</message>	            
+		<attachments>	                
+			<fileset dir="Reports">	                   
+				<include name="**/*.zip"/>	                
+			</fileset>	            
+		</attachments>	          
+	</mail>
+</target>	
+
+-->
+
+</project>
+

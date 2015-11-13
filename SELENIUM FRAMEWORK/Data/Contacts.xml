@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Gmail>
+
+  <credentials>
+  	<username>
+		<fn>Test</fn>
+		<ln>test1</ln>
+		<s>ss</s>
+	</username>
+	
+	<username>
+		<fn>test3</fn>
+		<ln>test2</ln>
+		<s>ss</s>
+	</username>
+   </credentials>
+     
+</Gmail>

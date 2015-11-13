@@ -1,0 +1,116 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">	
+
+<suite thread-count="1" verbose="1" name="Gmail Suite" annotations="JDK" parallel="tests">
+
+<!-- <listeners>
+<listener class-name="com.listener.TestListener" />
+</listeners> -->	
+
+
+<!-- Please follow the below guidelines and key values(case sensitive) while modifying this xml file. Failing to follow these, may result in script failure
+
+	Applicable for both Cloud and Local
+	
+	#1 browser-Type: represents the browser on which scripts need to execute
+		
+		  Browser Description - Key value to use
+		  ======================================
+
+		1. Mozilla Firefox :- firefox
+		2. Google Chrome :- chrome
+		3. Internet Explorer :- iexplore
+		4. Safari :- 		safari
+		5. HtmlUnitDriver :- headless
+		
+	
+	#2 [browser-Version] represents the version of the browser (i.e 11, 12, 13.............. )
+	The above Key is needed only for cloud executions (i.e. Saucelabs, browserstack......)
+	Please refer the below links for more information on supported platforms 
+		1. Saucelabs :- https://saucelabs.com/platforms
+		2. BrowserStack :- http://www.browserstack.com/list-of-browsers-and-platforms?product=live
+	
+	
+	#3 [OS-Name] represents operating system on which scripts need to execute
+	The above Key is needed only for cloud executions (i.e. Saucelabs, browserstack......)
+	
+	       OS Name Description - Key value to use
+	       ======================================
+		1. Microsoft Windows :- windows
+		2. Machentosh :- mac
+		3. Linux :- linux
+		4. Unix :- unix
+		5. Not specific about OS :- any
+		
+	
+	#4 [OS-Version] Represents the operating systems version(i.e XP, VISTA ....)
+		The above Key is needed only for cloud executions (i.e. Saucelabs, browserstack......)
+		
+		OS Version Description - Key Value to use
+		=========================================
+		1. Windows XP :- xp
+		2. Windows VISTA :- vista
+		3. Windows 7 :- 7
+		4. Windows 8 :- 8
+		5. Windows 8.1 :- 8_1
+		// Mac will be added soon
+		
+	
+	#5 [Session] represents relevant test name to mention in cloud reports
+	Applicable only for cloud executions (i.e. Saucelabs, browserstack......)
+	  Session = "any meaningful name about your test session"
+	 
+		
+	-->	
+   <test name="RunTests_On_Firefox_Mac">
+       <parameter name="browser-Type" value="chrome"/>
+       <parameter name="browser-Version" value="7"/>
+       <parameter name="OS-Name" value="mac"/>
+       <parameter name="OS-Version" value="7"/>
+       <parameter name="Session" value="Testing"/>
+       <classes>
+        	<class name="com.testsuite.email.EmailFunctionalities"/>
+       </classes> 
+    </test>
+    
+    <test name="RunTests_On_Chrome_Windows">
+       <parameter name="browser-Type" value="chrome"/>
+       <parameter name="browser-Version" value="35"/>
+       <parameter name="OS-Name" value="windows"/>
+       <parameter name="OS-Version" value=""/>
+       <parameter name="Session" value="Testing"/>
+       <classes>
+			<class name="com.testsuite.contactsandfooter.ContactsAndFooters"/>
+       </classes> 
+    </test>
+    
+    <!--test name="RunTests3">
+       <parameter name="browser-Type" value="firefox"/>
+       <parameter name="browser-Version" value="29"/>
+       <parameter name="OS-Name" value="MAC"/>
+       <classes>
+            <class name="com.testsuite.other.OtherLinks"/> 
+       </classes> 
+    </test--> 
+    
+    
+    
+<!--     To run complete package
+	<test name="Regression1">
+		<packages>
+			<package name="Com.TestSuite.Module_SendMail" />
+		</packages>
+	</test>
+ 
+
+	<test name="Test1">
+  		<groups>
+    		<run>
+				<include name="regression"/>
+			</run>
+		</groups>
+		<classes>
+            <class name="Com.TestSuite.Module_SendMail.SendMail_TestSuite"/>
+        </classes>
+	</test>	-->	
+
+</suite>
